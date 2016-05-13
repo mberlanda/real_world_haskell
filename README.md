@@ -8,3 +8,6 @@ In order to get started, you need first to [install Haskell](https://www.haskell
 ```bash
 $ sudo apt-get install haskell-platform
 ```
+
+### Notes
+- [01. Getting Started](ch01/notes.md)
