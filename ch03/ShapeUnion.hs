@@ -44,6 +44,7 @@ getDirection a b c
     | (slope a b) == (slope b c) = Direction.Straight
     | (slope a b) > (slope b c)  = Direction.Left
     | (slope a b) < (slope b c)  = Direction.Right
+  where slope (Point2D (x1, y1)) (Point2D (x2, y2)) = (y2 - y1) / (x2 - x1)
 
 p1 = Point2D (0, 5)
 p2 = Point2D (0, 0)

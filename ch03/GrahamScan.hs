@@ -1,71 +1,66 @@
 -- file: ch03/Direction.hs
 module GrahamScan where
 
-  data Cartesian2D = Cartesian2D {
+  import Data.List
+
+-- write a function that calculates the turn made bt three two-dimensional points
+  data Point2D = Point2D {
                   x :: Float,
                   y :: Float
                   }
-    deriving(Eq, Show)
+    deriving(Show, Eq, Ord)
 
-  data Direction = Left | Right | Straight
-    deriving(Show)
+  data Direction = CounterClockWise | ClockWise | Collinear
+    deriving(Show, Eq)
 
-  getDirection :: Cartesian2D -> Cartesian2D -> Cartesian2D -> Direction
-  getDirection a b c 
-    | crp a b c < 0 = GrahamScan.Right
-    | crp a b c > 0 = GrahamScan.Left
-    | otherwise     = GrahamScan.Straight   
-    where
-      crp a b c = (x a - x b ) * (y c - y b) - (y a - y b) * (x c - x b)
-      -- cross product of two vectors as per Graham Scan algorithm (https://en.wikipedia.org/wiki/Graham_scan)
-      -- direction of ab -> bc 
 
-  p1 = Cartesian2D { x= 0, y=5 }
-  p2 = Cartesian2D { x= 0, y=0 }
-  p3 = Cartesian2D { x= 5, y=0 }
-{- First wrong implementation
+  -- cross product of two vectors as per Graham Scan algorithm (https://en.wikipedia.org/wiki/Graham_scan)
+  ccw :: Point2D -> Point2D -> Point2D -> Float
+  ccw p1 p2 p3 = (x p2 - x p1 ) * (y p3 - y p1) - (y p2 - y p1) * (x p3 - x p1)
 
-  data Point2D = Point2D (Float, Float)
-    deriving(Show)
-  data Direction = Left | Right | Straight
-    deriving(Show)
+  getDir :: Point2D -> Point2D -> Point2D -> Direction
+  getDir a b c 
+    | ccw a b c < 0 = GrahamScan.ClockWise
+    | ccw a b c > 0 = GrahamScan.CounterClockWise
+    | otherwise     = GrahamScan.Collinear   
 
-  pitHyp :: Floating a => a -> a -> a
-  pitHyp cat1 cat2 = sqrt ( (cat1 ^ 2) + (cat2 ^ 2) ) 
+  lstDir :: [Point2D] -> [Direction]
+  lstDir [] = []
+  lstDir (_ : []) = []
+  lstDir (_ : _ : []) = []
+  lstDir (a:b:c:xs) = (getDir a b c) : lstDir (b:c:xs)
 
-  pitCat :: Floating a => a -> a -> a
-  pitCat hyp cat = sqrt   ( (hyp ^ 2) - (cat ^ 2) )
+  p1 = Point2D { x= 0, y=5 }
+  p2 = Point2D { x= 0, y=0 }
+  p3 = Point2D { x= 5, y=0 }
+  p4 = Point2D { x= 5, y=5 }
+  p5 = Point2D { x= 10, y=5 }
 
-  segm :: Point2D -> Point2D -> Float
-  segm (Point2D (x1, y1)) (Point2D (x2, y2)) = pitHyp (x1-x2) (y1-y2)
+  -- convex hull of a set X of points in the Euclidean plane or Euclidean space is the smallest convex set that contains X.
+  -- https://en.wikipedia.org/wiki/Convex_hull
+  --  convexHull :: [Point2D] -> [Direction]
+  onYX :: Point2D -> Point2D -> Ordering
+  onYX p1 p2
+    | x p1 > x p2                 = GT
+    | x p1 == x p2 && y p1 > y p2 = GT
+    | x p1 == x p2 && y p1 < y p2 = LT
+    | x p1 < x p2                 = LT
 
-  rad2deg :: Floating a => a -> a
-  rad2deg x = (x * 180) / pi
+  sortByAngle :: [Point2D] -> [Point2D]
+  sortByAngle pts = (sorted pts) ++ sentinel
+    where sorted pts = sortBy onYX pts
+          sentinel = [head (sorted pts)]
 
-  prodLst :: Floating a => [a] -> a
-  prodLst [] = 1
-  prodLst (x:xs) = x * (prodLst xs)
+  grahamScan :: [Point2D] -> [Point2D]
+  grahamScan [] = [] 
+  grahamScan xs = scan $ sorted
+    where scan (p1:p2:p3:pts) =
+            if (getDir p1 p2 p3) == GrahamScan.CounterClockWise 
+            then p1:scan(p3:pts)
+            else p1:scan(p2:p3:pts)
+          scan [p1, p2] = [p1]
+          scan _ = []
+          sorted = sortByAngle xs
 
-  -- cos alfa -> (b^2 + c^2 - a^2) / 2bc 
-  carnot :: Floating a => a -> a -> a -> a
-  carnot a b c  = rad2deg (acos  rad)
-                  where d   = (b ^2) + (c ^2) - (a ^2)
-                        adj = 2 * b * c
-                        rad = d / adj
-
-  angle :: Point2D -> Point2D -> Point2D -> Float
-  angle a b c = let ab = segm a b
-                    bc = segm b c
-                    ca = segm c a
-                in carnot ca ab bc
-  
-  getDirection :: Point2D -> Point2D -> Point2D -> Direction
-  getDirection a b c
-      | (slope a b) == (slope b c) = Direction.Straight
-      | (slope a b) > (slope b c)  = Direction.Left
-      | (slope a b) < (slope b c)  = Direction.Right
-
-  p1 = Point2D (0, 5)
-  p2 = Point2D (0, 0)
-  p3 = Point2D (5, 0)
--}
+  -- Sample 1
+  s1 = [ (Point2D 1 1), (Point2D 2 2), (Point2D 3 3), (Point2D 1 3)]
