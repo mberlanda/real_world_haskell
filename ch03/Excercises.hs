@@ -1,6 +1,9 @@
 -- file: ch03/Excercises.hs
-
+module Excercises where
+  
 import Data.List
+import Intersperse
+import Tree
 
 -- 1. write myLenght and test it with default lenght function
 len :: [a] -> Integer
@@ -52,5 +55,8 @@ cmp p x y = compare (p x) (p y)
 sortByLen :: [[a]] -> [[a]]
 sortByLen xs = sortBy (cmp len) xs
 
--- 7. create a function that joins a list with a separator
+-- 7. 8. write a function that joins a list with a separator
 -- file: ch03/Intersperse.hs
+
+-- 9. write a function that determinates the height of a Tree
+-- file: ch03/Tree.hs
