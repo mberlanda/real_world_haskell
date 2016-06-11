@@ -13,3 +13,4 @@ $ sudo apt-get install haskell-platform
 - [01. Getting Started](ch01/notes.md)
 - [02. Types and Functions](ch02/notes.md)
 - [03. Defining Types, Streamlining Functions](ch03/notes.md)
+- [04. Functional Programming](ch04/notes.md)
