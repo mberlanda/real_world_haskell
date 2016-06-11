@@ -4,6 +4,10 @@ Functions used in this chapter:
 - System.Environment (getArgs)
 - break, lines, unlines
 - Data.List : isPrefixOf, isInfixOf, isSuffixOf
+- lenght, null, head, tail, last, init
+- ++, concat, reverse, and, or, all f(), any f()
+- sublists: take int, drop int, splitAt int, takeWhile f(), dropWhile f(), span f()
+- words, unwords
 
 A simple command line framework:
 ```bash
@@ -27,4 +31,22 @@ Ok, modules loaded: Main.
 *Main> let ab ="unodue\ntrequattro\rcinquesei\r\nsetteotto"
 *Main> splitLines ab
 ["unodue","trequattro","cinquesei","setteotto"]
+```
+
+Partial and total functions:
+```bash
+ghci> :type all
+all :: (a -> Bool) -> [a] -> Bool
+ghci> all odd [1,3,5]
+True
+ghci> all odd [3,1,4,1,5,9,2,6,5]
+False
+ghci> all odd []
+True
+ghci> :type any
+any :: (a -> Bool) -> [a] -> Bool
+ghci> any even [3,1,4,1,5,9,2,6,5]
+True
+ghci> any even []
+False
 ```
