@@ -12,3 +12,14 @@ mabe@ubuntu:~/Tutorial/real_world_haskell/ch04 (master)*$ ./InteractWith notes.m
 error: exactly two arguments needed
 ```
 
+Warming up: portably splitting lines of text
+
+```bash
+mabe@ubuntu:~/Tutorial/real_world_haskell/ch04 (master)*$ ghci
+Prelude> :l SplitLines.hs 
+[1 of 1] Compiling Main             ( SplitLines.hs, interpreted )
+Ok, modules loaded: Main.
+*Main> let ab ="unodue\ntrequattro\rcinquesei\r\nsetteotto"
+*Main> splitLines ab
+["unodue","trequattro","cinquesei","setteotto"]
+```
