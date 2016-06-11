@@ -1,5 +1,10 @@
 # 04 Functional Programming
 
+Functions used in this chapter:
+- System.Environment (getArgs)
+- break, lines, unlines
+- Data.List : isPrefixOf, isInfixOf, isSuffixOf
+
 A simple command line framework:
 ```bash
 mabe@ubuntu:~/Tutorial/real_world_haskell/ch04 (master)*$ ghc --make InteractWith.hs
