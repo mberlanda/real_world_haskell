@@ -50,7 +50,17 @@ fstw (x:xs) = fst x : fstw xs
 
 onlyFirstWord :: String -> String
 onlyFirstWord [] = []
-onlyFirstWord s = unlines(fstw(lines$s))
+onlyFirstWord s = unlines.fstw.lines$s
 
 
+-- ex.04 Write a program that transposes the text in a file. For instance, it should convert "hello\nworld\n" to "hw\neo\nlr\nll\nod\n"
 
+myTranspose :: [[a]] -> [[a]]
+myTranspose xs
+    | null xs = []
+    | any null xs = []
+    | otherwise = (map head xs):myTranspose (map tail xs)
+
+transposeText :: String -> String
+transposeText [] = []
+transposeText s  = unlines.myTranspose.lines$s 
