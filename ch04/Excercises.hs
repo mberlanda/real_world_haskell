@@ -39,3 +39,18 @@ splitWith p s = case dropWhile p s of
                   [] -> []
                   s' -> w : splitWith p s''
                         where (w, s'') = break p s'
+
+-- ex.03  write a program that prints the first word of each line of its input
+
+fstw :: [String] -> [String]
+fstw [] = []
+fstw (x:xs) = fst x : fstw xs
+              where fst [] = []
+                    fst xs = head(words(xs))
+
+onlyFirstWord :: String -> String
+onlyFirstWord [] = []
+onlyFirstWord s = unlines(fstw(lines$s))
+
+
+
