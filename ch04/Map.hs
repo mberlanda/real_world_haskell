@@ -1,4 +1,4 @@
--- file: Map.hs
+-- file: ch04/Map.hs
 
 module Map
 where
