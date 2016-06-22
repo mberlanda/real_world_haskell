@@ -50,3 +50,13 @@ True
 ghci> any even []
 False
 ```
+How to think about loops:
+```bash
+*IntParse> asInt "123"
+123
+*IntParse> asInt ""
+0
+*IntParse> asInt "a"
+10
+```
+
