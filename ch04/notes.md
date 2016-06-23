@@ -72,3 +72,24 @@ square::[Double] -> [Double]
 square [] = []
 square (x:xs) = x*x : square xs 
 ```
+
+Fold:
+
+```haskell
+foldl :: (a -> b -> a) -> a -> [b] -> a
+foldr :: (a -> b -> b) -> b -> [a] -> b
+```
+
+```bash
+*Fold> let appendR xs ys = foldr (:) ys xs
+*Fold> appendR [1, 2, 3] [4, 5, 6]
+[1,2,3,4,5,6]
+*Fold> let appendL xs ys = foldl (:) xs ys
+<interactive>:36:24:
+    Occurs check: cannot construct the infinite type: a0 = [a0]
+    Expected type: a0 -> [a0] -> a0
+      Actual type: a0 -> [a0] -> [a0]
+    In the first argument of `foldl', namely `(:)'
+    In the expression: foldl (:) xs ys
+    In an equation for `appL': appL xs ys = foldl (:) xs ys
+```
