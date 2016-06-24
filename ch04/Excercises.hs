@@ -2,7 +2,7 @@
 module Excercises where
 
 import Testing
-import Data.Char  (digitToInt)
+import Data.Char  (digitToInt, isDigit)
 
 -- Half Chapter
 -- ex. 01
@@ -83,4 +83,22 @@ testAsInt_fold (xs, n) = asInt_fold xs == n
 ex1Test :: [Test]
 ex1Test = [ Test "asInt_fold test" testAsInt_fold 
             [("101", 101), ("1798", 1798), ("-31337", -31337)]
+          ]
+
+-- ex. 02 The asInt_fold function uses error, so its callers cannot handle errors
+type ErrorMessage = String
+asInt_either :: String -> Either ErrorMessage Int
+asInt_either "" = Left "Empty List"
+asInt_either xs
+  | (any (not . isDigit) cls) = Left "Not an integer"
+  | otherwise = Right (asInt_fold xs)
+  where cls = dropWhile (== '-') xs
+
+testAsInt_either :: (String, Either ErrorMessage Int) -> Bool
+testAsInt_either (xs, r) = asInt_either xs == r
+
+ex2Test :: [Test]
+ex2Test = [ Test "asInt_fold test" testAsInt_either 
+            [("", Left "Empty List"), ("1798", Right 1798),
+             ("-31337", Right (-31337)), ("12-55", Right 1255)]
           ]
