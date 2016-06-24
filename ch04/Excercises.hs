@@ -1,5 +1,10 @@
 --file: ch04/Excercises.hs
+module Excercises where
 
+import Testing
+import Data.Char  (digitToInt)
+
+-- Half Chapter
 -- ex. 01
 safeHead :: [a] -> Maybe a
 safeHead  [] = Nothing
@@ -64,3 +69,18 @@ myTranspose xs
 transposeText :: String -> String
 transposeText [] = []
 transposeText s  = unlines.myTranspose.lines$s 
+
+-- End Chapter
+-- ex. 01 Use a fold to rewrite and improve upon the asInt 
+
+asInt_fold :: String -> Int
+asInt_fold ('-':xs) = (-1) * asInt_fold xs
+asInt_fold  xs      = foldl (\acc x -> acc * 10 + digitToInt x) 0 xs
+
+testAsInt_fold :: (String, Int) -> Bool
+testAsInt_fold (xs, n) = asInt_fold xs == n
+
+ex1Test :: [Test]
+ex1Test = [ Test "asInt_fold test" testAsInt_fold 
+            [("101", 101), ("1798", 1798), ("-31337", -31337)]
+          ]
