@@ -114,3 +114,17 @@ ex3Test :: [Test]
 ex3Test = [Test "concat' test" testConcat'
            [([[1..10], [15..20]], [1,2,3,4,5,6,7,8,9,10,15,16,17,18,19,20])]
           ]
+
+-- 4.Write your own definition of the standard takeWhile function, first using explicit recursion, then foldr
+takeWhile_rec :: (a -> Bool) -> [a] -> [a]
+takeWhile_rec _ [] = []
+takeWhile_rec p (x:xs) = if p x then x : takeWhile_rec p xs else []
+
+takeWhile_foldr :: (a -> Bool) -> [a] -> [a]
+takeWhile_foldr p xs = foldr step [] xs
+  where step y ys
+         | p y       = y : ys
+         | otherwise = []
+
+takeWhile_foldr' :: (a -> Bool) -> [a] -> [a]
+takeWhile_foldr' p xs = foldr (\y ys -> if p y then y : ys else []) [] xs
