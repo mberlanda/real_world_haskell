@@ -102,3 +102,15 @@ ex2Test = [ Test "asInt_fold test" testAsInt_either
             [("", Left "Empty List"), ("1798", Right 1798),
              ("-31337", Right (-31337)), ("12-55", Right 1255)]
           ]
+
+-- ex. 03 Write your own definition of concat using foldr
+concat' :: [[a]] -> [a]
+concat' = foldr (++) []
+
+testConcat' :: Eq a => ([[a]], [a]) -> Bool
+testConcat' (xs, x) = concat' xs == x
+
+ex3Test :: [Test]
+ex3Test = [Test "concat' test" testConcat'
+           [([[1..10], [15..20]], [1,2,3,4,5,6,7,8,9,10,15,16,17,18,19,20])]
+          ]
