@@ -1,5 +1,15 @@
 -- file: ch05/SimpleJSON.hs
-module  SimpleJSON where
+module  SimpleJSON 
+    (
+      JValue(..)
+    , getString
+    , getInt
+    , getDouble
+    , getBool
+    , getObject
+    , getArray
+    , isNull
+    ) where
 
 data JValue = JString String
             | JNumber Double
