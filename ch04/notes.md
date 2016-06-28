@@ -74,12 +74,10 @@ square (x:xs) = x*x : square xs
 ```
 
 Fold:
-
 ```haskell
 foldl :: (a -> b -> a) -> a -> [b] -> a
 foldr :: (a -> b -> b) -> b -> [a] -> b
 ```
-
 ```bash
 *Fold> let appendR xs ys = foldr (:) ys xs
 *Fold> appendR [1, 2, 3] [4, 5, 6]
@@ -94,11 +92,28 @@ foldr :: (a -> b -> b) -> b -> [a] -> b
     In an equation for `appL': appL xs ys = foldl (:) xs ys
 ```
 
-Partial function application and currying
+Partial function application and currying:
 ```bash
 ghci> :type dropWhile
 dropWhile :: (a -> Bool) -> [a] -> [a]
 ghci> :module +Data.Char
 ghci> :type dropWhile isSpace
 dropWhile isSpace :: [Char] -> [Char]
+```
+Code reuse through composition implementation:
+```bash
+ghci> :type (.)
+(.) :: (b -> c) -> (a -> b) -> a -> c
+ghci> :module +Data.Char
+ghci> let capCount = length . filter (isUpper . head) . words
+ghci> capCount "Hello there, Mom!"
+2
+ghci> :type isUpper . head
+isUpper . head :: [Char] -> Bool
+```
+libcap implementation
+```C
+#define DLT_EN10MB      1       /* Ethernet (10Mb) */
+#define DLT_EN3MB       2       /* Experimental Ethernet (3Mb) */
+#define DLT_AX25        3       /* Amateur Radio AX.25 */
 ```
