@@ -3,7 +3,7 @@ module Excercises where
 
 import Testing
 import Data.Char  (digitToInt, isDigit, isSpace)
-import Data.List (find, delete)
+import Data.List (foldl')
 
 -- Half Chapter
 -- ex. 01
@@ -160,3 +160,15 @@ splitWith_foldr p xs = case foldr f [[]] xs of {([]:r)-> r; r->r}
 
 words_foldr :: String -> [String]
 words_foldr = splitWith_foldr (\x -> not (isSpace x))
+
+lines_foldr :: String -> [String]
+lines_foldr = splitWith_foldr (\x -> not (elem x "\n\r"))
+
+unlines_foldl :: [String] -> String
+unlines_foldl = foldl' step [] where step z x = z ++ x ++ "\n"
+
+unlines_foldl' :: [String] -> String
+unlines_foldl' = foldl' (\z x -> z ++ x ++ "\n") []
+
+unlines_foldr :: [String] -> String
+unlines_foldr = foldr (\z x -> z ++ "\n" ++ x) []
