@@ -2,7 +2,7 @@
 module Excercises where
 
 import Testing
-import Data.Char  (digitToInt, isDigit)
+import Data.Char  (digitToInt, isDigit, isSpace)
 import Data.List (find, delete)
 
 -- Half Chapter
@@ -151,3 +151,12 @@ cycle_foldr xs = foldr (:) (cycle_foldr xs) xs
 
 cycle' ::  [a] -> [a]
 cycle' = concat . repeat
+
+splitWith_foldr :: (a -> Bool) -> [a] -> [[a]]
+splitWith_foldr p xs = case foldr f [[]] xs of {([]:r)-> r; r->r}
+    where  f a acc@(as:rest) | p a       = (a:as):rest
+                             | null as   = acc
+                             | otherwise = []:acc
+
+words_foldr :: String -> [String]
+words_foldr = splitWith_foldr (\x -> not (isSpace x))
