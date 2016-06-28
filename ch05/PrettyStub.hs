@@ -21,3 +21,6 @@ text str = undefined
 
 double :: Double -> Doc
 double num = undefined
+
+fsep :: [Doc] -> Doc
+fsep xs = undefined
