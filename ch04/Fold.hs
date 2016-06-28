@@ -35,4 +35,47 @@ identity :: [a] -> [a]
 identity xs = myFoldr (:) [] xs
 
 append :: [a] -> [a] -> [a]
-identity xs ys = myFoldr (:) ys xs
+append xs ys = myFoldr (:) ys xs
+
+-- Space leaks and strict evaluation
+foldl_seq  :: (a -> b -> a) -> a -> [b] -> a
+foldl_seq _    zero []     = zero
+foldl_seq step zero (x:xs) =
+    let new = step zero x
+    in  new `seq` foldl_seq step new xs
+
+--  when a seq expression is evaluated, it forces its first argument to be evaluated, then returns its second argument. It doesn't actually do anything with the first argument: seq exists solely as a way to force that value to be evaluated. 
+-- e.g. foldl_seq (+) 3 []
+
+-- Learning to use seq
+
+-- incorrect: seq is hidden by the application of someFunc
+-- since someFunc will be evaluated first, seq may occur too late
+hiddenInside x y = someFunc (x `seq` y)
+    where someFunc = undefined
+
+-- incorrect: a variation of the above mistake
+hiddenByLet x y z = let a = x `seq` someFunc y
+                    in anotherFunc a z
+                    where someFunc = undefined
+                          anotherFunc = undefined
+
+-- correct: seq will be evaluated first, forcing evaluation of x
+onTheOutside x y = x `seq` someFunc y
+    where someFunc = undefined
+
+chained x y z = x `seq` y `seq` someFunc z
+    where someFunc = undefined
+
+-- A common mistake is to try to use seq with two unrelated expressions
+badExpression step zero (x:xs) =
+    seq (step zero x)
+        (badExpression step (step zero x) xs)
+
+-- seq stops as soon as it reaches a constructor
+strictPair :: (a,b) -> (a,b)
+strictPair (a,b) = a `seq` b `seq` (a,b)
+
+strictList :: [a] -> [a]
+strictList (x:xs) = x `seq` x : strictList xs
+strictList []     = []
