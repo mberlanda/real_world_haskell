@@ -13,3 +13,7 @@ where
 
   niceSum :: Num a => [a] -> a
   niceSum xs = foldl (+) 0 xs
+
+  -- Partial function application and currying implementation
+  nicerSum :: Num a => [a] -> a
+  nicerSum = foldl (+) 0

@@ -93,3 +93,12 @@ foldr :: (a -> b -> b) -> b -> [a] -> b
     In the expression: foldl (:) xs ys
     In an equation for `appL': appL xs ys = foldl (:) xs ys
 ```
+
+Partial function application and currying
+```bash
+ghci> :type dropWhile
+dropWhile :: (a -> Bool) -> [a] -> [a]
+ghci> :module +Data.Char
+ghci> :type dropWhile isSpace
+dropWhile isSpace :: [Char] -> [Char]
+```
