@@ -137,7 +137,17 @@ groupBy_def eq (x:xs)       =  (x:ys) : groupBy_def eq zs
                            where (ys,zs) = span (eq x) xs
 
 groupBy_foldr :: (a -> a -> Bool) -> [a] -> [[a]]
-groupBy_foldr f = foldr step []
+groupBy_foldr p = foldr step []
     where step x [] = [[x]]
-        step x (ys@(y:_):yss) | f x y     = (x:ys):yss
-                              | otherwise = [x]:ys:yss
+          step x (ys@(y:_):yss) | p x y     = (x:ys):yss
+                                | otherwise = [x]:ys:yss
+
+-- ex. 06 How many of the following Prelude functions can you rewrite using list folds? any, cycle, words, unlines
+any_foldr :: (a -> Bool) -> [a] -> Bool
+any_foldr p = foldr (\x y -> p x || y) False
+
+cycle_foldr :: [a] -> [a]
+cycle_foldr xs = foldr (:) (cycle_foldr xs) xs
+
+cycle' ::  [a] -> [a]
+cycle' = concat . repeat
