@@ -3,6 +3,7 @@ module Excercises where
 
 import Testing
 import Data.Char  (digitToInt, isDigit)
+import Data.List (find, delete)
 
 -- Half Chapter
 -- ex. 01
@@ -115,7 +116,7 @@ ex3Test = [Test "concat' test" testConcat'
            [([[1..10], [15..20]], [1,2,3,4,5,6,7,8,9,10,15,16,17,18,19,20])]
           ]
 
--- 4.Write your own definition of the standard takeWhile function, first using explicit recursion, then foldr
+-- ex. 04 Write your own definition of the standard takeWhile function, first using explicit recursion, then foldr
 takeWhile_rec :: (a -> Bool) -> [a] -> [a]
 takeWhile_rec _ [] = []
 takeWhile_rec p (x:xs) = if p x then x : takeWhile_rec p xs else []
@@ -128,3 +129,15 @@ takeWhile_foldr p xs = foldr step [] xs
 
 takeWhile_foldr' :: (a -> Bool) -> [a] -> [a]
 takeWhile_foldr' p xs = foldr (\y ys -> if p y then y : ys else []) [] xs
+
+-- ex. 05 Write your own definition of Data.List (groupBy)
+groupBy_def                 :: (a -> a -> Bool) -> [a] -> [[a]]
+groupBy_def _  []           =  []
+groupBy_def eq (x:xs)       =  (x:ys) : groupBy_def eq zs
+                           where (ys,zs) = span (eq x) xs
+
+groupBy_foldr :: (a -> a -> Bool) -> [a] -> [[a]]
+groupBy_foldr f = foldr step []
+    where step x [] = [[x]]
+        step x (ys@(y:_):yss) | f x y     = (x:ys):yss
+                              | otherwise = [x]:ys:yss
