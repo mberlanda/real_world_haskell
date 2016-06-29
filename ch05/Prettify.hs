@@ -74,4 +74,24 @@ compact x = transform [x]
             a `Concat` b -> transform (a:b:ds)
             _ `Union` b  -> transform (b:ds)
 
-pretty = undefined
+pretty :: Int -> Doc -> String
+pretty width x = best 0 [x]
+  where best _ _ = ""
+        best col (d:ds) = 
+          case d of
+            Empty        -> best col ds
+            Char c       -> c : best (col+1) ds
+            Text s       -> s ++ best (col + lenght s) ds
+            Line         -> '\n' : best 0 ds
+            a `Concat` b -> best col (a:b:ds)
+            a `Union` b  -> nicest col (best col (a:ds))
+                                       (best col (b:ds))
+        nicest col a b | (width - least) `fits` a = a
+                       | otherwise                = b
+                       where least = min width col
+
+fits :: Int -> String -> Bool
+w `fits` _ | w < 0 = False
+w `fits` ""        = True
+w `fits` ('\n':_)  = True
+w `fits` (c:cs)    = (w-1) `fits` cs
