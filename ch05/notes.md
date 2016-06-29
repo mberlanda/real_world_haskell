@@ -24,3 +24,17 @@ Text "bar"
 *Main> text "foo"  </> text "bar"
 Concat (Concat (Text "foo") (Union (Char ' ') Line)) (Text "bar")
 ```
+Compact rendering:
+```bash
+Prelude SimpleJSON> :l PrettyJSON.hs 
+[2 of 3] Compiling Prettify         ( Prettify.hs, interpreted )
+[3 of 3] Compiling PrettyJSON       ( PrettyJSON.hs, interpreted )
+Ok, modules loaded: PrettyJSON, SimpleJSON, Prettify.
+*PrettyJSON> let value = renderJValue (JObject [("f", JNumber 1), ("q", JBool True)])
+*PrettyJSON> :t value
+value :: Doc
+*PrettyJSON> putStrLn (compact value)
+{"f": 1.0,
+"q": true
+}
+```

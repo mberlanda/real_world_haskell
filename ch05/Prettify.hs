@@ -1,4 +1,9 @@
 -- file: ch05/Prettify.hs
+module Prettify (
+  Doc, (<>), char, double, fsep,
+  hcat, punctuate, text,compact,
+  pretty) where
+
 data Doc = Empty
          | Char Char
          | Text String
@@ -56,3 +61,17 @@ flatten (x `Concat` y) = flatten x `Concat` flatten y
 flatten Line           = Char ' '
 flatten (x `Union` _)  = flatten x
 flatten other          = other
+
+compact :: Doc -> String
+compact x = transform [x]
+  where transform [] = ""
+        transform (d:ds) = 
+          case d of
+            Empty        -> transform ds
+            Char c       -> c : transform ds
+            Text s       -> s ++ transform ds
+            Line         -> '\n' : transform ds
+            a `Concat` b -> transform (a:b:ds)
+            _ `Union` b  -> transform (b:ds)
+
+pretty = undefined
