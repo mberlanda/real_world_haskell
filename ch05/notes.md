@@ -38,3 +38,19 @@ value :: Doc
 "q": true
 }
 ```
+Exercises:
+```bash
+*PrettyJSON> let value = renderJValue (JObject [("foo", (JObject [("baz", JNumber 123)])), ("bar", JNumber 456)])
+*PrettyJSON> putStrLn (pretty 10 (Prettify.nest 4 value))
+
+{
+    "foo": 
+    {
+        "baz": 123.0
+        
+    },
+    "bar": 456.0
+    
+}
+*PrettyJSON> 
+```

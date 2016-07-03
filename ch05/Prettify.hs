@@ -2,7 +2,7 @@
 module Prettify (
   Doc, (<>), char, double, fsep,
   hcat, punctuate, text,compact,
-  pretty, fill) where
+  pretty, fill, nest) where
 
 data Doc = Empty
          | Char Char
@@ -97,8 +97,8 @@ w `fits` ""        = True
 w `fits` ('\n':_)  = True
 w `fits` (c:cs)    = (w-1) `fits` cs
 
--- ex. 01 fill function should add spaces to a document until it is the given number of columns wide. If it is already wider than this value, it should add no spaces
 -- http://stackoverflow.com/a/32346509/5687152
+-- ex. 01 fill function should add spaces to a document until it is the given number of columns wide. If it is already wider than this value, it should add no spaces
 fill :: Int ->  Doc -> Doc
 fill width x = hcat (init (scanLines 0 [x <> Line]))
   where
@@ -112,3 +112,22 @@ fill width x = hcat (init (scanLines 0 [x <> Line]))
         a `Concat` b -> scanLines col (a:b:ds)
         _ `Union` b  -> scanLines col (b:ds)
     padLine w = replicate w ' '
+
+-- ex. 02 nest function for indentation
+nest :: Int -> Doc -> Doc
+nest indentation x = indent 0 [x]
+  where
+    indent _ []             = Empty
+    indent nestLevel (d:ds) =
+      case d of
+        Empty        -> indent nestLevel ds
+        Char '{'     -> padLine nestLevel <> Char '{' <> indent (nestLevel + 1) (Line:ds)
+        Char '}'     -> padLine (nestLevel - 1) <> Char '}' <> indent (nestLevel - 1) ds
+        Char '['     -> padLine nestLevel <> Char '[' <> indent (nestLevel + 1) (Line:ds)
+        Char ']'     -> padLine (nestLevel - 1) <> Char ']' <> indent (nestLevel - 1) ds
+        Char c       -> Char c <> indent nestLevel ds
+        Text s       -> Text s <> indent nestLevel ds
+        Line         -> padLine nestLevel <> indent nestLevel ds
+        a `Concat` b -> indent nestLevel (a:b:ds)
+        a `Union` b  -> indent nestLevel (a:ds) `Union` indent nestLevel (b:ds)
+    padLine nl = Line <> Text (replicate (nl * indentation) ' ')
