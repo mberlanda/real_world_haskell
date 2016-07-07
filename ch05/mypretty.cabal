@@ -9,6 +9,7 @@ Author:        Mauro Berlanda
 Maintainer:    mauroberlanda@gmail.com
 
 Cabal-Version: >= 1.2
+build-type: Simple
 library
   Exposed-Modules: Prettify
                    PrettyJSON

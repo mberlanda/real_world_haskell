@@ -57,3 +57,32 @@ Exercises:
 
 Creating a package:
 - write a package description into a .cabal file
+- create a Setup.hs file
+- configuration: e.g.
+```bash
+$ runghc Setup configure
+# Cabal will install our package in the system-wide package database
+$ runghc Setup configure --prefix=$HOME --user
+# Cabal will install our in the home directory and in the personal package database
+
+~/real_world_haskell/ch05 (master) $ runghc Setup configure --prefix=$HOME --user
+Configuring mypretty-0.1...
+```
+- build the package
+```bash
+$ runghc Setup build
+~/real_world_haskell/ch05 (master) $ runghc Setup build
+Building mypretty-0.1...
+Preprocessing library mypretty-0.1...
+[1 of 3] Compiling SimpleJSON       ( SimpleJSON.hs, dist/build/SimpleJSON.o )
+[2 of 3] Compiling Prettify         ( Prettify.hs, dist/build/Prettify.o )
+[3 of 3] Compiling PrettyJSON       ( PrettyJSON.hs, dist/build/PrettyJSON.o )
+In-place registering mypretty-0.1...
+```
+- install the package
+```bash
+$ runghc Setup install
+~/real_world_haskell/ch05 (master) $ runghc Setup install
+Installing library in /home/mabe/lib/mypretty-0.1/ghc-7.6.3
+Registering mypretty-0.1..
+```

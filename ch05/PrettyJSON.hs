@@ -56,4 +56,3 @@ hexEscape c | d < 0x10000 = smallHex d
 series :: Char -> Char -> (a -> Doc) -> [a] -> Doc
 series open close item = enclose open close
                        . fsep . punctuate (char ',') . map item
-
