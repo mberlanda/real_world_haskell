@@ -54,3 +54,6 @@ Exercises:
 }
 *PrettyJSON> 
 ```
+
+Creating a package:
+- write a package description into a .cabal file
