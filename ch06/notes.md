@@ -25,3 +25,15 @@ class  Eq a  where
     x /= y     =  not (x == y)
     x == y     =  not (x /= y)
 ```
+
+Declaring typeclass instances:
+```
+Prelude> :cd ch06
+Prelude> :l naiveeq.hs 
+[1 of 1] Compiling Main             ( naiveeq.hs, interpreted )
+Ok, modules loaded: Main.
+*Main> isEqual3 Red Blue
+False
+*Main> isNotEqual3 Red Blue
+True
+```
