@@ -15,3 +15,4 @@ $ sudo apt-get install haskell-platform
 - [03. Defining Types, Streamlining Functions](ch03/notes.md)
 - [04. Functional Programming](ch04/notes.md)
 - [05. Writing a library: working with JSON data](ch05/notes.md)
+- [06. Using Typeclasses](ch06/notes.md)
