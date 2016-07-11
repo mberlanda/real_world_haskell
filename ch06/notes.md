@@ -11,3 +11,17 @@ True
 *Main> colorEq Blue Red
 False
 ```
+
+What are typeclasses?
+
+> The keywoard to define a typeclass in Haskell is class. Unfortunately, this may be confusing for those of you coming from an object-oriented background, as we are not really defining the same thing.
+
+```hs
+class  Eq a  where
+    (==), (/=) :: a -> a -> Bool
+
+       -- Minimal complete definition:
+       --     (==) or (/=)
+    x /= y     =  not (x == y)
+    x == y     =  not (x /= y)
+```
