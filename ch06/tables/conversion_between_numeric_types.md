@@ -1,9 +1,8 @@
 # Conversion Between Numeric Types
 
-| | Destination Type  ||||
+| Source Type| Destination Type  ||||
 |---|-----|-----|-----|-----|
-| Source Type| Double, Float | Int, Word | Integer | Rational  |
-|---|-----|-----|-----|-----|
+| | Double, Float | Int, Word | Integer | Rational  |
 |Double, Float | fromRational . toRational | truncate *  | truncate *  | toRational  |
 |Int, Word | fromIntegral  | fromIntegral  | fromIntegral  | fromIntegral  |
 |Integer | fromIntegral  | fromIntegral  | N/A | fromIntegral  |
