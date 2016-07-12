@@ -1,8 +1,10 @@
 # 06 Using Typeclasses
 
-*Tables:*
+####Tables:
 - [Selected Numeric Types](tables/selected_numeric_types.md)
 - [Selected Numeric Functions and Constants](tables/selected_numeric_functions_and_constants.md)
+- [Typeclass Instances for Numeric Types](tables/typeclass_instances_for_numeric_types.md)
+- [Conversion Between Numeric Types](tables/conversion_between_numeric_types.md)
 
 The need for typeclasses:
 ```
