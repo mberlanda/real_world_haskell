@@ -37,3 +37,14 @@ False
 *Main> isNotEqual3 Red Blue
 True
 ```
+
+Important Built-In Typeclasses:
+- show
+- putStrLn
+- read 
+```
+Prelude> (read "12.4")::Double
+12.4
+Prelude> :t it
+it :: Double
+```
