@@ -1,5 +1,9 @@
 # 06 Using Typeclasses
 
+*Tables:*
+- [Selected Numeric Types](tables/selected_numeric_types.md)
+- [Selected Numeric Functions and Constants](tables/selected_numeric_functions_and_constants.md)
+
 The need for typeclasses:
 ```
 Prelude> :cd ch06
