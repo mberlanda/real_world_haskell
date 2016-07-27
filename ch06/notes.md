@@ -56,3 +56,10 @@ it :: Double
 ```
 Automatic Derivation:
 > For many simple data types, the Haskell compiler can automatically derive instances of Read, Show, Bounded, Enum, Eq, and Ord for us.
+
+Typeclasses at work:
+```hs
+{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances #-} 
+```
+Refer to the wikiHaskell documentation about[pragmas](https://wiki.haskell.org/Language_Pragmas).
