@@ -54,3 +54,5 @@ Prelude> (read "12.4")::Double
 Prelude> :t it
 it :: Double
 ```
+Automatic Derivation:
+> For many simple data types, the Haskell compiler can automatically derive instances of Read, Show, Bounded, Enum, Eq, and Ord for us.
