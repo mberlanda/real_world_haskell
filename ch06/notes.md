@@ -62,4 +62,24 @@ Typeclasses at work:
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-} 
 ```
-Refer to the wikiHaskell documentation about[pragmas](https://wiki.haskell.org/Language_Pragmas).
+> Refer to the wikiHaskell documentation about[pragmas](https://wiki.haskell.org/Language_Pragmas).
+
+JSON typeclasses without overlapping instances:
+```
+# ex. 1
+Prelude> :m +Control.Arrow
+Prelude Control.Arrow> :t second
+second :: Arrow a => a b c -> a (d, b) (d, c)
+Prelude Control.Arrow> first (*2) (1, 1)
+(2,1)
+Prelude Control.Arrow> second (*2) (1, 1)
+(1,2)
+
+ # ex. 2
+ Prelude Control.Arrow> :t (,)
+(,) :: a -> b -> (a, b)
+Prelude Control.Arrow> :t (,,)
+(,,) :: a -> b -> c -> (a, b, c)
+Prelude Control.Arrow> (,) 1 2
+(1,2)
+```
