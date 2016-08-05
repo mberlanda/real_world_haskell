@@ -83,3 +83,9 @@ Prelude Control.Arrow> :t (,,)
 Prelude Control.Arrow> (,) 1 2
 (1,2)
 ```
+
+The dreaded monomorphism restriction:
+> [...] if GHC complains about the monomorphism restriction, we have three easy ways to address the error.
+> Make the function's arguments explicit, instead of leaving them implicit.
+> Give the definition an explicit type signature, instead of making the compiler infer its type.
+> Leave the code untouched, and compile the module with the NoMonomorphismRestriction language extension enabled. This disables the monomorphism restriction.
