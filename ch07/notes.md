@@ -23,7 +23,8 @@ ghci> :type openFile
 openFile :: FilePath -> IOMode -> IO Handle
 ```
 
-*Possible IOMode Values*
+Possible IOMode Values:
+
 |IOMode|Can read?|Can write?|Starting position|Notes|
 |------|---------|----------|-----------------|-----|
 |ReadMode|Yes|No|Beginning of file|File must exist already|
@@ -31,6 +32,7 @@ openFile :: FilePath -> IOMode -> IO Handle
 |ReadWriteMode|Yes|Yes|Beginning of file|File is created if it didn't exist; otherwise, existing data is left intact|
 |AppendMode|No|Yes|End of file|File is created if it didn't exist; otherwise, existing data is left intact|
 
+Some common functions:
 - _hClose_ : close the file 
 - _hTell_ : takes a Handle and returns an IO Integer with your position
 - _hSeek_ : takes three parameters (a Handle, a SeekMode, and a position)
