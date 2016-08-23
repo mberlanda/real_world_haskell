@@ -68,3 +68,17 @@ Temporary Files
 - _System.Directory.getTemporaryDirectory_ reveals the best location for tmp files (e.g. '.' is the current directory)
 - The return type of openTempFile is IO (FilePath, Handle). The first part of the tuple is the name of the file created, and the second is a Handle opened in ReadWriteMode over that file
 - once used the tmp file, _hClose_ and _removeFile_
+
+#### Extended Example: Functional I/O and Temporary Files
+```
+mabe@ubuntu:~/Tutorial/real_world_haskell/ch07 (master)*$ runhaskell tempfile.hsWelcome to tempfile.hs
+I have a temporary file at /tmp/mytemp9807.txt
+My initial position is 0
+Writing one line containing 22 bytes: [1,2,3,4,5,6,7,8,9,10]
+After writing, my new position is 23
+The file content is: 
+[1,2,3,4,5,6,7,8,9,10]
+
+Which could be expressed as this Haskell literal:
+"[1,2,3,4,5,6,7,8,9,10]\n"
+```
