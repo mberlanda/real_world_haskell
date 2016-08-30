@@ -88,3 +88,14 @@ Which could be expressed as this Haskell literal:
 - _readFile_ and _writeFile_
 > `putStr` (and all the similar output functions) write out data as it becomes available. They also have no need for keeping around data already written, so as long as nothing else in the program needs it, the memory can be freed immediately. In a sense, you can think of the String between `readFile` and `writeFile` as a pipe linking the two. Data goes in one end, is transformed some way, and flows back out the other.
 - _interact_ `$ runghc toupper-lazy4.hs < "input.txt" > "output.txt"` (e.g. this can be used to filter rows)
+
+#### The IO Monad
+- actions: Haskell has functions in the mathematical sense: they are purely computations which cannot be altered by anything external.  I/O actions are defined within the IO monad.
+```
+Prelude> :t map
+map :: (a -> b) -> [a] -> [b]
+Prelude> :t mapM
+mapM :: Monad m => (a -> m b) -> [a] -> m [b]
+Prelude> :t mapM_
+mapM_ :: Monad m => (a -> m b) -> [a] -> m ()
+```
