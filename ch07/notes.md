@@ -82,3 +82,9 @@ The file content is:
 Which could be expressed as this Haskell literal:
 "[1,2,3,4,5,6,7,8,9,10]\n"
 ```
+
+#### Lazy I/O
+- _hGetContents_
+- _readFile_ and _writeFile_
+> `putStr` (and all the similar output functions) write out data as it becomes available. They also have no need for keeping around data already written, so as long as nothing else in the program needs it, the memory can be freed immediately. In a sense, you can think of the String between `readFile` and `writeFile` as a pipe linking the two. Data goes in one end, is transformed some way, and flows back out the other.
+- _interact_ `$ runghc toupper-lazy4.hs < "input.txt" > "output.txt"` (e.g. this can be used to filter rows)
