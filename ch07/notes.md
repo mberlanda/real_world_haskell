@@ -100,6 +100,7 @@ Prelude> :t mapM_
 mapM_ :: Monad m => (a -> m b) -> [a] -> m ()
 ```
 - sequencing:
-..* `do` blocks are shortcut notations for joining together actions
-..* `>>` operator sequences two actions together: the first action is performed, then the second. The result of the computation is the result of the second action
-..* `>>=` operator runs an action, then passes its result to a function that returns an action
+  - `do` blocks are shortcut notations for joining together actions
+  - `>>` operator sequences two actions together: the first action is performed, then the second. The result of the computation is the result of the second action
+  - `>>=` operator runs an action, then passes its result to a function that returns an action
+- return: `return` is used to wrap data in a monad. When speaking about I/O, return is used to take pure data and bring it into the IO monad
