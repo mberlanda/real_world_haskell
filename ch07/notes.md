@@ -104,3 +104,20 @@ mapM_ :: Monad m => (a -> m b) -> [a] -> m ()
   - `>>` operator sequences two actions together: the first action is performed, then the second. The result of the computation is the result of the second action
   - `>>=` operator runs an action, then passes its result to a function that returns an action
 - return: `return` is used to wrap data in a monad. When speaking about I/O, return is used to take pure data and bring it into the IO monad
+
+#### Buffering
+hey are defined as the `BufferMode` type: 
+- `NoBuffering`
+- `LineBuffering` output buffer to be written whenever the newline character is output, or whenever it gets too large
+- `BlockBuffering` read or write data in fixed-size chunks when possible. This is the best performer when processing large amounts of data in batch.
+
+#### Reading Command-Line Arguments
+> Many command-line programs are interested in the parameters passed on the command line. System.Environment.getArgs returns IO [String] listing each argument. This is the same as argv in C, starting with argv[1]. The program name (argv[0] in C) is available from System.Environment.getProgName.
+
+#### Environment Variables
+> If you need to read environment variables, you can use one of two functions in System.Environment: getEnv or getEnvironment. getEnv looks for a specific variable and raises an exception if it doesn't exist. getEnvironment returns the whole environment as a [(String, String)], and then you can use functions such as lookup to find the environment entry you want.
+> Setting environment variables is not defined in a cross-platform way in Haskell. If you are on a POSIX platform such as Linux, you can use putEnv or setEnv from the System.Posix.Env module.
+```bash
+Prelude> :module + System.Environment 
+Prelude System.Environment> getEnvironment >>= mapM_ (\(a,b) -> putStrLn $ a ++"\n"++ b++"\n")
+```
