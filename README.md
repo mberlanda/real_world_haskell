@@ -17,3 +17,4 @@ $ sudo apt-get install haskell-platform
 - [05. Writing a library: working with JSON data](ch05/notes.md)
 - [06. Using Typeclasses](ch06/notes.md)
 - [07. I/O](ch07/notes.md)
+- [08. Efficient file processing, regular expressions, and file name matching](ch08/notes.md)
