@@ -67,5 +67,27 @@ Prelude Text.Regex.Posix Data.ByteString.Char8> pack "good food" =~ ".ood" :: By
 "good"
 Prelude Text.Regex.Posix Data.ByteString.Char8> pack "good food" =~ ".ood" :: Int
 2
-  
+```
+
+#### Translating a glob pattern into a regular expression
+```
+Prelude> :l ch08/GlobRegex.hs 
+[1 of 1] Compiling GlobRegex        ( ch08/GlobRegex.hs, interpreted )
+Ok, modules loaded: GlobRegex.
+*GlobRegex> globToRegex "f??.c"
+Loading package array-0.4.0.1 ... linking ... done.
+Loading package deepseq-1.3.0.1 ... linking ... done.
+Loading package bytestring-0.10.0.2 ... linking ... done.
+Loading package containers-0.5.0.0 ... linking ... done.
+Loading package transformers-0.3.0.0 ... linking ... done.
+Loading package mtl-2.1.2 ... linking ... done.
+Loading package regex-base-0.93.2 ... linking ... done.
+Loading package regex-posix-0.95.2 ... linking ... done.
+"^f??\\.c$"
+*GlobRegex> "test.c" =~ globToRegex "t[ea]s*" :: Bool
+True
+*GlobRegex> "test.c" =~ globToRegex "t[!ea]s*" :: Bool
+False
+*GlobRegex> matchesGlob "/home/mabe/Tutorial/real_world_haskell/ch08/GlobRegex.hs" "/home/mabe/*"
+True
 ```
