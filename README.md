@@ -18,3 +18,4 @@ $ sudo apt-get install haskell-platform
 - [06. Using Typeclasses](ch06/notes.md)
 - [07. I/O](ch07/notes.md)
 - [08. Efficient file processing, regular expressions, and file name matching](ch08/notes.md)
+- [09. I/O Case Study: A Library for Searching the Filesystem](ch09/notes.md)
