@@ -91,3 +91,18 @@ False
 *GlobRegex> matchesGlob "/home/mabe/Tutorial/real_world_haskell/ch08/GlobRegex.hs" "/home/mabe/*"
 True
 ```
+
+####
+```
+Prelude> :m +System.FilePath
+Prelude System.FilePath> "foo" </> "bar"
+Loading package filepath-1.3.0.1 ... linking ... done.
+"foo/bar"
+Prelude System.FilePath> dropTrailingPathSeparator "foo/"
+"foo"
+Prelude System.FilePath> splitFileName "foo/bar/Quux.hs"
+("foo/bar/","Quux.hs")
+Prelude System.FilePath> splitFileName "zippity"
+("./","zippity")
+
+```
