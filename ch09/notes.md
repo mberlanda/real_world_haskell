@@ -28,3 +28,5 @@ Three problems of SimpleFinder implementation:
 - predicate is not very expressive
 - no control over how it traverses the filesystem (e.g. versioning systems)
 - it would be preferred a lazy stream of results
+
+> Some functions used by the book (in particular handle) have a deprecated implementation, so it seems more reasonable to move on and eventually come back to this example after the book is finished.
