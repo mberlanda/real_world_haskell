@@ -16,4 +16,4 @@ rename old new = do
   let f = if isFile then renameFile else renameDirectory
   f old new
 
--- cc2cpp = mapM (renameWith (flip replaceExtension ".cpp")) =<< namesMatching "*.cc"
+cc2cpp = mapM (renameWith (flip replaceExtension ".cpp")) =<< namesMatching "*.cc"

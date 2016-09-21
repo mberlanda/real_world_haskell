@@ -1,32 +1,35 @@
 -- file: ch08/Glob.hs
 {--
-    No instance for (Exception e0) arising from a use of `handle'
-    The type variable `e0' is ambiguous
-    Possible fix: add a type signature that fixes these type variable(s)
-    Note: there are several potential instances:
-      instance Exception NestedAtomically
-        -- Defined in `Control.Exception.Base'
-      instance Exception NoMethodError
-        -- Defined in `Control.Exception.Base'
-      instance Exception NonTermination
-        -- Defined in `Control.Exception.Base'
-      ...plus 7 others
-    In the expression: handle (const (return []))
-    In an equation for `it': it = handle (const (return []))
+  No instance for (Exception e0) arising from a use of `handle'
+  The type variable `e0' is ambiguous
+  Possible fix: add a type signature that fixes these type variable(s)
+  Note: there are several potential instances:
+    instance Exception NestedAtomically
+      -- Defined in `Control.Exception.Base'
+    instance Exception NoMethodError
+      -- Defined in `Control.Exception.Base'
+    instance Exception NonTermination
+      -- Defined in `Control.Exception.Base'
+    ...plus 7 others
+  In the expression: handle (const (return []))
+  In an equation for `it': it = handle (const (return []))
 
-
-
+  http://stackoverflow.com/a/10579198/5687152
+--}
 module Glob (namesMatching) where
 
 import System.Directory (doesDirectoryExist, doesFileExist,
                          getCurrentDirectory, getDirectoryContents)
 import System.FilePath (dropTrailingPathSeparator, splitFileName, (</>))
-import Control.Exception (handle)
+import Control.Exception (handle, IOException(..))
 import Control.Monad (forM)
 import GlobRegex (matchesGlob)
 
 isPattern :: String -> Bool
 isPattern = any (`elem` "[*?")
+
+handleIO :: (IOException -> IO a) -> IO a -> IO a
+handleIO = handle
 
 namesMatching pat
   | not (isPattern pat) = do
@@ -61,7 +64,7 @@ listMatches dirName pat = do
     dirName' <- if null dirName
                 then getCurrentDirectory
                 else return dirName
-    handle (const (return [])) $ do
+    handleIO (const (return [])) $ do
         names <- getDirectoryContents dirName'
         let names' = if isHidden pat
                      then filter isHidden names
@@ -77,4 +80,3 @@ listPlain dirName baseName = do
               then doesDirectoryExist dirName
               else doesNameExist (dirName </> baseName)
     return (if exists then [baseName] else [])
---}
