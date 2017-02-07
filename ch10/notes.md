@@ -112,3 +112,24 @@ Just True
 ghci> fmap odd Nothing
 Nothing
 ```
+
+### Writing a Functor Instance for Parse
+
+```
+*Parse> parse parseByte L.empty
+Left "byte offset 0: no more input"
+*Parse> parse (id <$> parseByte) L.empty
+Left "byte offset 0: no more input"
+*Parse> let input = L8.pack "foo"
+*Parse> L.head input
+102
+*Parse> parse parseByte input
+Right 102
+*Parse> parse (id <$> parseByte) input
+Right 102
+*Parse> import Data.Char
+*Parse Data.Char> parse ((chr . fromIntegral) <$> parseByte) input
+Right 'f'
+*Parse Data.Char> parse (chr <$> fromIntegral <$> parseByte) input
+Right 'f'
+```
