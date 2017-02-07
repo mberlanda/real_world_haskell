@@ -133,3 +133,10 @@ Right 'f'
 *Parse Data.Char> parse (chr <$> fromIntegral <$> parseByte) input
 Right 'f'
 ```
+
+### Using Functors for Parsing
+```
+*Parse> let input = L8.pack "foo"
+*Parse> parse parseChar input
+Right 'f'
+```
