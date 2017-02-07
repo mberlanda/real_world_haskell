@@ -46,3 +46,69 @@ Just ('f',"oo")
 *PNM> L8.uncons L8.empty
 Nothing
 ```
+
+### Introducing functors
+```
+*TreeMap> let tree = Node (Leaf "foo") (Node (Leaf "x") (Leaf "quux"))
+*TreeMap> treeLengths tree
+Node (Leaf 3) (Node (Leaf 1) (Leaf 4))
+*TreeMap> treeMap length tree
+Node (Leaf 3) (Node (Leaf 1) (Leaf 4))
+*TreeMap> treeMap (odd *FlexibleInstances> fmap (== "cheeseburger") (Left 1 :: Either Int String)
+Left 1
+*FlexibleInstances> fmap (== "cheeseburger") (Right "fries" :: Either Int String)
+Right False
+. length) tree
+Node (Leaf True) (Node (Leaf True) (Leaf False))
+*TreeMap> TreeMap.fmap length ["foo", "quux"]
+[3,4]
+*TreeMap> TreeMap.fmap length (Node (Leaf "Livingstone") (Leaf "I presume"))
+Node (Leaf 11) (Leaf 9)
+
+# Infix use of fmap
+Prelude> (1+) `fmap` [1,2,3] ++ [4,5,6]
+[2,3,4,4,5,6]
+Prelude> fmap (1+) ([1,2,3] ++ [4,5,6])
+[2,3,4,5,6,7]
+
+# Flexible Instances
+Prelude> :l ch10/FlexibleInstances.hs 
+[1 of 1] Compiling Main             ( ch10/FlexibleInstances.hs, interpreted )
+
+ch10/FlexibleInstances.hs:3:10:
+    Illegal instance declaration for ‘Functor (Either Int)’
+      (All instance types must be of the form (T a1 ... an)
+       where a1 ... an are *distinct type variables*,
+       and each type variable appears at most once in the instance head.
+       Use FlexibleInstances if you want to disable this.)
+    In the instance declaration for ‘Functor (Either Int)’
+Failed, modules loaded: none.
+*FlexibleInstances> fmap (== "cheeseburger") (Left 1 :: Either Int String)
+Left 1
+*FlexibleInstances> fmap (== "cheeseburger") (Right "fries" :: Either Int String)
+Right False
+```
+
+Assumptions made using `Functor`:
+
+- a functor must preserve identity
+```
+ghci> fmap id (Node (Leaf "a") (Leaf "b"))
+Node (Leaf "a") (Leaf "b")
+```
+
+- a functor must be composable
+```
+ghci> (fmap even . fmap length) (Just "twelve")
+Just True
+ghci> fmap (even . length) (Just "twelve")
+Just True
+```
+
+- a functor must preserve shape
+```
+ghci> fmap odd (Just 1)
+Just True
+ghci> fmap odd Nothing
+Nothing
+```
