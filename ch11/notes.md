@@ -64,11 +64,35 @@ Line) Line) Line) Line)),Char 'M',Text "YdwVLrQOQh"]
 ```
 
 
-Working version after
+Working version after [SO question](https://stackoverflow.com/questions/46728553/arbitrary-string-generator-in-haskell-test-quickcheck-gen)
 
 ```
 Prelude> :l Arbitrary.hs
 Main> generate $ vectorOf 10 arbitrary :: IO [Ternary]
 [Unknown,Yes,Yes,Unknown,Unknown,No,Unknown,No,Unknown,Yes]
+
+```
+
+
+Measuring Test Coverage with HPC
+
+```
+$ ghc --make Run.hs
+$ ./Run
+$ ghc -fhpc Run.hs --make
+[1 of 2] Compiling Prettify2        ( Prettify2.hs, Prettify2.o )
+[2 of 2] Compiling Main             ( Run.hs, Run.o )
+Linking Run ...
+$ ./Run
++++ OK, passed 200 tests.
+$ hpc report Run
+ 89% expressions used (58/65)
+ 50% boolean coverage (2/4)
+      50% guards (2/4), 1 always True, 1 unevaluated
+     100% 'if' conditions (0/0)
+     100% qualifiers (0/0)
+ 75% alternatives used (3/4)
+100% local declarations used (0/0)
+ 66% top-level declarations used (8/12)
 
 ```
