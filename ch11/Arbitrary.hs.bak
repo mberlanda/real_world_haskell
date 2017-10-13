@@ -1,0 +1,86 @@
+-- file: ch11/Arbitrary.hs.bak
+{-# LANGUAGE FlexibleInstances, TypeSynonymInstances #-}
+
+import System.Random
+import Test.QuickCheck.Gen
+import Test.RandomStrings
+import qualified Test.QuickCheck.Arbitrary
+
+import Prettify2
+import Control.Monad( liftM, liftM2 )
+
+
+class Arbitrary a where
+    arbitrary :: Gen a
+    -- elements' :: [a] => Gen a {- Expected a constraint, but ‘[a]’ has kind ‘*’ -}
+    -- choose' :: Random a => (a, a) -> Gen a
+    -- oneof' :: [Gen a] -> a
+
+data Ternary = Yes
+             | No
+             | Unknown
+             deriving(Eq, Show)
+
+{-
+instance Arbitrary Ternary where
+    we can write an Arbitrary instance for the Ternary type by defining
+    a function that picks elements from a list of the possible values of
+    Ternary type
+    arbitrary = elements [Yes, No, Unknown]
+-}
+
+instance Arbitrary Ternary where
+    arbitrary = do
+        n <- choose (0, 2) :: Gen Int
+        return $ case n of
+                      0 -> Yes
+                      1 -> No
+                      _ -> Unknown
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (a, b) where
+  arbitrary = do
+      x <- arbitrary
+      y <- arbitrary
+      return (x, y)
+
+instance Arbitrary Char where
+    arbitrary = elements (['A'..'Z'] ++ ['a' .. 'z'] ++ " ~!@#$%^&*()")
+
+{- Bogus implementations: No instance for (Arbitrary String)
+
+instance Arbitrary String where
+    arbitrary = elements ([randomString])
+this cannot be solved event importing `import qualified Test.QuickCheck.Arbitrary`
+
+instance Arbitrary Doc where
+    arbitrary = do
+        n <- choose (1,6) :: Gen Int
+        case n of
+            1 -> return Empty
+            2 -> do x <- arbitrary
+                    return (Char x)
+            3 -> do x <- arbitrary
+                    return (Text x)
+            4 -> return Line
+            5 -> do x <- arbitrary
+                    y <- arbitrary
+                    return (Concat x y)
+            6 -> do x <- arbitrary
+                    y <- arbitrary
+                    return (Union x y)
+-}
+
+instance Arbitrary String where
+    arbitrary = do
+        n <- choose (8, 16) :: Gen Int
+        return $ randomWord randomASCII n :: Gen String
+
+instance Arbitrary Doc where
+    arbitrary =
+        oneof [ return Empty
+              , liftM Char arbitrary
+              , liftM Text arbitrary
+              , return Line
+              , liftM2 Concat arbitrary arbitrary
+              , liftM2 Union arbitrary arbitrary ]
+
