@@ -21,3 +21,4 @@ $ sudo apt-get install haskell-platform
 - [09. I/O Case Study: A Library for Searching the Filesystem](ch09/notes.md)
 - [10. Code Case Study: Parsing a Binary Data Format](ch10/notes.md)
 - [11. Testing and quality assurance](ch11/notes.md)
+- [12. Barcode Recognition](ch12/notes.md)
