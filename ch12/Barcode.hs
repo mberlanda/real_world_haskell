@@ -60,3 +60,26 @@ foldA f s a = go s (indices a)
 -- starting value, similar to foldl1 on lists.
 foldA1 :: Ix k => (a -> a -> a) -> Array k a -> a
 foldA1 f a = foldA f (a ! fst (bounds a)) a
+
+-- Encoding an EAN-13 Barcode
+
+encodeEAN13 :: String -> String
+encodeEAN13 = concat . encodeDigits . map digitToInt
+
+-- | This function computes the check digit; don't pass one in.
+encodeDigits :: [Int] -> [String]
+encodeDigits s@(first:rest) =
+        outerGuard : lefties ++ centerGuard : righties ++ [outerGuard]
+    where (left, right) = splitAt 5 rest
+          lefties = zipWith leftEncode (parityCodes ! first) left
+          righties = map rightEncode (right ++ [checkDigit s])
+
+leftEncode :: Char -> Int -> String
+leftEncode '1' = (leftOddCodes !)
+leftEncode '0' = (leftEvenCodes !)
+
+rightEncode :: Int -> String
+rightEncode = (rightCodes !)
+
+outerGuard = "101"
+centerGuard = "01010"

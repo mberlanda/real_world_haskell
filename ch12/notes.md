@@ -48,3 +48,6 @@ ghci> a ! 'e'
 
 ```
 
+### Encoding an EAN-13 Barcode
+
+> It’s useful to have an encoder for reference. This will allow us to, for example, ensure that our code is correct by checking that the output of `decode . encode` is the same as its input
