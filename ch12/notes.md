@@ -67,3 +67,42 @@ In this book we don't process images since they tend to be out of focus, noisy, 
 - Parsing a Color Image
 - Grayscale Conversion: we need to convert the color data into monochrome
 - Grayscale to Binary and Type Safety: convert the grayscale image into a two-valued image, where each pixel is either on or off
+
+### Finding Matching Digits
+
+```
+-- Run Length Encoding:
+*Main> group [1,1,2,3,3,3,3]
+[[1,1],[2],[3,3,3,3]]
+*Main> let bits = [0,0,1,1,0,0,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0]
+*Main> runLength bits
+[(2,0),(2,1),(2,0),(2,1),(6,0),(4,1),(4,0)]
+*Main> runLengths bits
+[2,2,2,2,6,4,4]
+-- Scaling Run Lengths, and Finding Approximate Matches
+*Main> let group = scaleToOne [2,6,4,4]
+*Main> group
+[1 % 8,3 % 8,1 % 4,1 % 4]
+*Main> distance group (head leftEvenSRL)
+13 % 28
+*Main> distance group (head leftOddSRL)
+17 % 28
+*Main> leftOddSRL
+[[3 % 7,2 % 7,1 % 7,1 % 7],[2 % 7,2 % 7,2 % 7,1 % 7],[2 % 7,1 % 7,2 % 7,2 % 7],[1 % 7,4 % 7,1 % 7,1 % 7],[1 % 7,1 % 7,3 % 7,2 % 7],[1 % 7,2 % 7,3 % 7,1 % 7],[1 % 7,1 % 7,1 % 7,4 % 7],[1 % 7,3 % 7,1 % 7,2 % 7],[1 % 7,2 % 7,1 % 7,3 % 7],[3 % 7,1 % 7,1 % 7,2 % 7]]
+*Main> bestScores leftOddSRL [1, 2, 3]
+[(1 % 7,5),(2 % 7,4),(8 % 21,1)]
+-- List Comprehensions
+*Main> [ (a,b) | a <- [1,2], b <- "abc" ]
+[(1,'a'),(1,'b'),(1,'c'),(2,'a'),(2,'b'),(2,'c')]
+*Main> [ (a,b) | a <- [1..6], b <- [5..7], even (a + b ^ 2) ] # eval an expression
+[(1,5),(1,7),(2,6),(3,5),(3,7),(4,6),(5,5),(5,7),(6,6)]
+*Main> let vowel = (`elem` "aeiou")
+*Main> [ x | a <- "etaoin", b <- "shrdlu", let x = [a,b], all vowel x ]
+["eu","au","ou","iu"]
+*Main> [ a | (3,a) <- [(1,'y'),(3,'a'),(5,'p')] ]
+"a"
+*Main> [ a | (3,a) <- [(1,'y'),(3,'a'),(3,'p')] ]
+"ap"
+
+```
+

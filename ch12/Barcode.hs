@@ -139,3 +139,54 @@ threshold n a = binary <$> a
           least    = fromIntegral $ choose (<) a
           greatest = fromIntegral $ choose (>) a
           choose f = foldA1 $ \x y -> if f x y then x else y
+
+-- Finding Matching Digits
+-- | Run Length Encoding
+
+type Run = Int
+type RunLength a = [(Run, a)]
+
+runLength :: Eq a => [a] -> RunLength a
+runLength = map rle . group
+    where rle xs = (length xs, head xs)
+
+runLengths :: Eq a => [a] -> [Run]
+runLengths = map fst . runLength
+
+-- | Scaling Run Lengths, and Finding Approximate Matches
+type Score = Ratio Int
+
+scaleToOne :: [Run] -> [Score]
+scaleToOne xs = map divide xs
+    where divide d = fromIntegral d / divisor
+          divisor = fromIntegral (sum xs)
+
+-- A more compact alternative that "knows" we're using Ratio Int:
+-- scaleToOne xs = map (% sum xs) xs
+
+type ScoreTable = [[Score]]
+-- "SRL" means "scaled run length".
+asSRL :: [String] -> ScoreTable
+asSRL = map (scaleToOne . runLengths)
+
+leftOddSRL = asSRL leftOddList
+leftEvenSRL = asSRL leftEvenList
+rightSRL = asSRL rightList
+paritySRL = asSRL parityList
+
+distance :: [Score] -> [Score] -> Score
+distance a b = sum . map abs $ zipWith (-) a b
+
+type Digit = Word8
+
+-- List Comprehensions
+-- our original
+-- zip [distance d (scaleToOne ps) | d <- srl] digits
+-- the same expression, expressed without a list comprehension
+-- zip (map (flip distance (scaleToOne ps)) srl) digits
+-- the same expression, written entirely as a list comprehension
+
+bestScores :: ScoreTable -> [Run] -> [(Score, Digit)]
+bestScores srl ps = take 3 . sort $ scores
+    where scores = [(distance d (scaleToOne ps), n) | d <- srl, n <- digits]
+          digits = [0..9]
