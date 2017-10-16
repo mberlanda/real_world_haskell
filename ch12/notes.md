@@ -106,3 +106,49 @@ In this book we don't process images since they tend to be out of focus, noisy, 
 
 ```
 
+### Remembering a Match's Parity
+
+- For each match in the left group, we have to remember whether we found it in the even parity table or the odd table
+
+```
+*Main> let p1 = Even 2
+*Main> let p2 = Odd 3
+*Main> fromParity p1
+2
+*Main> fromParity p2
+3
+*Main> parityMap (*2) p1
+Even 4
+*Main> parityMap (*3) p2
+Odd 9
+*Main> fmap (*3) p2
+Odd 9
+```
+- sort parity-encoded values based on the values they contain
+```
+-- type signature needed
+-- compareWithoutParity :: Ord a => Parity a -> Parity a -> Ordering
+*Main> let p1 = Even 2
+*Main> let p2 = Odd 3
+*Main> compareWithoutParity p1 p2
+LT
+*Main> compareWithoutParity p2 p1
+GT
+*Main> compareWithoutParity (Even 'a') (Odd 'b')
+LT
+
+*Main> bestLeft [0,0,0,0,1,1,1,0,1,1,1,1,0]
+[Odd (1 % 1,0),Odd (1 % 1,0),Odd (1 % 1,0),Even (1 % 1,0),Even (1 % 1,0),Even (1 % 1,0)]
+*Main> bestRight [0,0,0,0,1,1,1,0,1,1,1,1,0]
+[None (1 % 1,0),None (1 % 1,0),None (1 % 1,0)]
+
+-- Another kind of laziness, of the keyboarding variety
+*Main> show $ Even 1
+"Even 1"
+*Main> show $ AltEven 1
+"AltEven {fromAltParity = 1}"
+*Main> length . show $ Even 1
+6
+*Main> length . show $ AltEven 1
+27
+```

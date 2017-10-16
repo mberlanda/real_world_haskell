@@ -190,3 +190,43 @@ bestScores :: ScoreTable -> [Run] -> [(Score, Digit)]
 bestScores srl ps = take 3 . sort $ scores
     where scores = [(distance d (scaleToOne ps), n) | d <- srl, n <- digits]
           digits = [0..9]
+
+-- Remembering a Match's Parity
+data Parity a = Even a | Odd a | None a
+     deriving (Show)
+
+
+fromParity :: Parity a -> a
+fromParity (Even a) = a
+fromParity (Odd a)  = a
+fromParity (None a) = a
+
+parityMap :: (a -> b) -> Parity a -> Parity b
+parityMap f (Even a) = Even (f a)
+parityMap f (Odd a) = Odd (f a)
+parityMap f (None a) = None (f a)
+
+instance Functor Parity where
+  fmap = parityMap
+
+on :: (a -> a -> b) -> (c -> a) -> c -> c -> b
+on f g x y = g x `f` g y
+
+compareWithoutParity :: Ord a => Parity a -> Parity a -> Ordering
+compareWithoutParity = compare `on` fromParity
+
+bestLeft :: [Run] -> [Parity (Score, Digit)]
+bestLeft ps = sortBy compareWithoutParity
+              ((map Odd (bestScores leftOddSRL ps)) ++
+              (map Even (bestScores leftEvenSRL ps)))
+
+bestRight :: [Run] -> [Parity (Score, Digit)]
+bestRight = map None . bestScores rightSRL
+
+-- Another kind of laziness, of the keyboarding variety
+-- we could have used Haskell’s record syntax to avoid the need to write a fromParity function
+
+data AltParity a = AltEven {fromAltParity :: a}
+                 | AltOdd {fromAltParity :: a}
+                 | AltNone {fromAltParity :: a}
+                   deriving (Show)
