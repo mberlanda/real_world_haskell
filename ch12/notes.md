@@ -51,3 +51,19 @@ ghci> a ! 'e'
 ### Encoding an EAN-13 Barcode
 
 > It’s useful to have an encoder for reference. This will allow us to, for example, ensure that our code is correct by checking that the output of `decode . encode` is the same as its input
+
+### Constraints on Our Decoder
+
+In this book we don't process images since they tend to be out of focus, noisy, low in contrast, and of poor resolution.
+
+### Divide and Conquer
+
+- Convert color data into a form we can easily work with.
+- Sample a single scan line from the image and extract a set of guesses as to what the encoded digits in this line could be.
+- From the guesses, create a list of valid decodings.
+
+### Turning a Color Image into Something Tractable
+
+- Parsing a Color Image
+- Grayscale Conversion: we need to convert the color data into monochrome
+- Grayscale to Binary and Type Safety: convert the grayscale image into a two-valued image, where each pixel is either on or off
