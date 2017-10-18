@@ -175,6 +175,62 @@ input :: [(Run, Bit)]
 [None 0,None 1,None 2]
 [None 0,None 1,None 2]
 [None 0,None 1,None 2]
-
 ```
 
+### Life Without Arrays or Hash Tables
+
+Haskell arrays are not mutable.
+
+Arrays and hash tables are often used as collections indexed by a key, and in Haskell we use trees for this purpose.
+
+Haskell’s standard libraries provide two collection types that are implemented using balanced trees behind the scenes: `Data.Map` for key/value pairs and `Data.Set` for sets of values.
+
+```
+-- A Brief Introduction to Maps
+Prelude> import qualified Data.Map as M
+-- Getting started with the API
+Prelude M> M.empty
+fromList []
+Prelude M> M.singleton "foo" True
+fromList [("foo",True)]
+
+Prelude M> :type M.lookup
+M.lookup :: Ord k => k -> M.Map k a -> Maybe a
+Prelude M> let m = M.singleton "foo" 1 :: M.Map String Int
+Prelude M> m
+fromList [("foo",1)]
+Prelude M> case M.lookup "bar" m of { Just v -> "yay"; Nothing -> "boo" }
+"boo"
+Prelude M> case M.lookup "foo" m of { Just v -> "yay"; Nothing -> "boo" }
+"yay"
+
+-- The insert function simply inserts a value into the map, overwriting any
+-- matching value that may already have been present.
+Prelude M> :type M.insert
+M.insert :: Ord k => k -> a -> M.Map k a -> M.Map k a
+Prelude M> M.insert "quux" 10 m
+fromList [("foo",1),("quux",10)]
+Prelude M> M.insert "foo" 9999 m
+fromList [("foo",9999)]
+
+-- The insertWith' function takes a further combining function as its argument
+Prelude M> :type M.insertWith'
+M.insertWith'
+  :: Ord k => (a -> a -> a) -> k -> a -> M.Map k a -> M.Map k a
+Prelude M> M.insertWith' (+) "zippity" 10 m
+fromList [("foo",1),("zippity",10)]
+Prelude M> M.insertWith' (+) "foo" 9999 m
+fromList [("foo",10000)]
+
+Prelude M> :type M.delete
+M.delete :: Ord k => k -> M.Map k a -> M.Map k a
+Prelude M> M.delete "foo" m
+fromList []
+
+-- set-like operations on maps
+Prelude M> m `M.union` M.singleton "quux" 1
+fromList [("foo",1),("quux",1)]
+Prelude M> m `M.union` M.singleton "foo" 0
+fromList [("foo",1)]
+```
+[Further Reading](http://www.cs.cmu.edu/~rwh/theses/okasaki.pdf)
