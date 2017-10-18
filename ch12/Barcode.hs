@@ -230,3 +230,25 @@ data AltParity a = AltEven {fromAltParity :: a}
                  | AltOdd {fromAltParity :: a}
                  | AltNone {fromAltParity :: a}
                    deriving (Show)
+
+-- Chunking a List
+chunkWith :: ([a] -> ([a], [a])) -> [a] -> [[a]]
+chunkWith _ [] = []
+chunkWith f xs = let (h, t) = f xs
+                 in h : chunkWith f t
+
+chunksOf :: Int -> [a] -> [[a]]
+chunksOf n = chunkWith (splitAt n)
+
+-- Generating a List of Candidate Digits
+
+candidateDigits :: RunLength Bit -> [[Parity Digit]]
+candidateDigits ((_, One):_) = []
+candidateDigits rle | length rle < 59 = []
+candidateDigits rle
+                  | any null match = []
+                  | otherwise = map (map (fmap snd)) match
+                  where match = map bestLeft left ++ map bestRight right
+                        left = chunksOf 4 . take 24 . drop 3 $ runLengths
+                        right = chunksOf 4 . take 24 . drop 32 $ runLengths
+                        runLengths = map fst rle

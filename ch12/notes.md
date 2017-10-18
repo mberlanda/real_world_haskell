@@ -151,4 +151,30 @@ LT
 6
 *Main> length . show $ AltEven 1
 27
+
+-- Chunking a List
+*Main> chunksOf 3 [1,2,3,4,5,6]
+[[1,2,3],[4,5,6]]
+
+-- Generating a List of Candidate Digits
+*Main> let input = zip (runLengths $ encodeEAN13 "978013211467") (cycle [Zero, One])
+*Main> :t input
+input :: [(Run, Bit)]
+*Main> candidateDigits input
+[[Odd 0,Odd 1,Odd 2,Even 0,Even 0,Even 0],[Even 0,Even 1,Even 2,Odd 0,Odd 0,Odd 0],[Even 0,Even 1,Even 2,Odd 0,Odd 0,Odd 0],[Odd 0,Odd 1,Odd 2,Even 0,Even 0,Even 0],[Even 0,Even 1,Even 2,Odd 0,Odd 0,Odd 1],[Odd 0,Odd 0,Even 0,Even 0,Odd 1,Even 1],[None 0,None 1,None 2],[None 0,None 1,None 2],[None 0,None 1,None 2],[None 0,None 1,None 2],[None 0,None 1,None 2],[None 0,None 1,None 2]]
+*Main> mapM_ print $ candidateDigits input
+[Odd 0,Odd 1,Odd 2,Even 0,Even 0,Even 0]
+[Even 0,Even 1,Even 2,Odd 0,Odd 0,Odd 0]
+[Even 0,Even 1,Even 2,Odd 0,Odd 0,Odd 0]
+[Odd 0,Odd 1,Odd 2,Even 0,Even 0,Even 0]
+[Even 0,Even 1,Even 2,Odd 0,Odd 0,Odd 1]
+[Odd 0,Odd 0,Even 0,Even 0,Odd 1,Even 1]
+[None 0,None 1,None 2]
+[None 0,None 1,None 2]
+[None 0,None 1,None 2]
+[None 0,None 1,None 2]
+[None 0,None 1,None 2]
+[None 0,None 1,None 2]
+
 ```
+
