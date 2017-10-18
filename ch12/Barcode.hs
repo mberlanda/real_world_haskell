@@ -252,3 +252,69 @@ candidateDigits rle
                         left = chunksOf 4 . take 24 . drop 3 $ runLengths
                         right = chunksOf 4 . take 24 . drop 32 $ runLengths
                         runLengths = map fst rle
+
+-- Solving for Check Digits in Parallel
+type Map a = M.Map Digit [a]
+
+type DigitMap = Map Digit
+type ParityMap = Map (Parity Digit)
+
+updateMap :: Parity Digit   -- ^ new digit
+          -> Digit          -- ^ existing key
+          -> [Parity Digit] -- ^ existing digit sequence
+          -> ParityMap      -- ^ map to update
+          -> ParityMap
+updateMap digit key seq = insertMap key (fromParity digit) (digit:seq)
+
+insertMap :: Digit -> Digit -> [a] -> Map a -> Map a
+insertMap key digit val m = val `seq` M.insert key' val m
+    where key' = (key + digit) `mod` 10
+
+useDigit :: ParityMap -> ParityMap -> Parity Digit -> ParityMap
+useDigit old new digit =
+    new `M.union` M.foldWithKey (updateMap digit) M.empty old
+
+incorporateDigits :: ParityMap -> [Parity Digit] -> ParityMap
+incorporateDigits old digits = foldl' (useDigit old) M.empty digits
+
+finalDigits :: [[Parity Digit]] -> ParityMap
+finalDigits = foldl' incorporateDigits (M.singleton 0 [])
+              . mapEveryOther (map (fmap (*3)))
+
+-- Completing the Solution Map with the First Digit
+-- extract the value of the first digit from the parities of the left group of digits
+firstDigit :: [Parity a] -> Digit
+firstDigit = snd
+           . head
+           . bestScores paritySRL
+           . runLengths
+           . map parityBit
+           . take 6
+    where parityBit (Even _) = Zero
+          parityBit (Odd _) = One
+
+
+-- create a completed solution map, by computing the first digit in each sequence, and using it to create that last solution map
+addFirstDigit :: ParityMap -> DigitMap
+addFirstDigit = M.foldWithKey updateFirst M.empty
+
+-- get rid of the Parity type and reverse our earlier multiplications by three
+updateFirst :: Digit -> [Parity Digit] -> DigitMap -> DigitMap
+updateFirst key seq = insertMap key digit (digit:renormalize qes)
+    where renormalize = mapEveryOther (`div` 3) . map fromParity
+          digit = firstDigit qes
+          qes = reverse seq
+
+-- complete the check digit computation
+buildMap :: [[Parity Digit]] -> DigitMap
+buildMap = M.mapKeys (10 -)
+         . addFirstDigit
+         . finalDigits
+
+-- Finding the Correct Sequence
+solve :: [[Parity Digit]] -> [[Digit]]
+solve [] = []
+solve xs = catMaybes $ map (addCheckDigit m) checkDigits
+    where checkDigits = map fromParity (last xs)
+          m = buildMap (init xs)
+          addCheckDigit m k = (++[k]) <$> M.lookup k m

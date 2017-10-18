@@ -234,3 +234,35 @@ Prelude M> m `M.union` M.singleton "foo" 0
 fromList [("foo",1)]
 ```
 [Further Reading](http://www.cs.cmu.edu/~rwh/theses/okasaki.pdf)
+
+### Turning Digit Soup into an Answer
+
+```
+*Main> let input = zip (runLengths $ encodeEAN13 "978013211467") (cycle [Zero, One])
+*Main> product . map length . candidateDigits $ input
+34012224
+
+-- Solving for Check Digits in Parallel
+*Main> let single n = M.singleton n [Even n] :: ParityMap
+*Main> :t useDigit
+useDigit :: ParityMap -> ParityMap -> Parity Digit -> ParityMap
+*Main> useDigit (single 1) M.empty (Even 1)
+fromList [(2,[Even 1,Even 1])]
+*Main> useDigit (single 1) (single 2) (Even 2)
+fromList [(2,[Even 2]),(3,[Even 2,Even 1])]
+
+*Main> :t incorporateDigits
+incorporateDigits :: ParityMap -> [Parity Digit] -> ParityMap
+*Main> incorporateDigits (M.singleton 0 []) [Even 1, Even 5]
+fromList [(1,[Even 1]),(5,[Even 5])]
+
+*Main> :t finalDigits
+finalDigits :: [[Parity Digit]] -> ParityMap
+*Main> finalDigits [[Even 1, Even 2], [Odd 3, Odd 4]]
+fromList [(0,[Odd 4,Even 6]),(6,[Odd 3,Even 3]),(7,[Odd 4,Even 3]),(9,[Odd 3,Even 6])]
+
+-- Finding the Correct Sequence
+*Main> let input = zip (runLengths $ encodeEAN13 "978013211467") (cycle [Zero, One])
+*Main> listToMaybe . solve . candidateDigits $ input
+Just [0,2,0,1,0,0,0,0,0,0,0,0,1] -- WRONG
+```
