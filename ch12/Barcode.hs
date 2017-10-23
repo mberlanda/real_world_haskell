@@ -324,10 +324,33 @@ solve xs = catMaybes $ map (addCheckDigit m) checkDigits
 
 -- withRow function takes a row, converts it to monochrome
 withRow :: Int -> Pixmap -> (RunLength Bit -> a) -> a
-withRow n greymap f = f. runLenght . elemes $ posterized
+withRow n greymap f = f. runLength . elems $ posterized
     where posterized = threshold 0.4 . fmap luminance . row n $ greymap
 
 row :: (Ix a, Ix b) => b -> Array (a,b) c -> Array a c
 row j a = ixmap (l, u) project a
     where project i = (i, j)
           ((l, _), (u, _)) = bounds a
+
+-- Pulling It All Together
+findMatch :: [(Run, Bit)] -> Maybe [[Digit]]
+findMatch = listToMaybe
+          . filter (not . null)
+          . map (solve . candidateDigits)
+          .tails
+-- we're taking advantage of lazy evaluation. The call to map over tails will only be
+-- evaluated until it results in a nonempty list
+
+findEAN13 :: Pixmap -> Maybe [Digit]
+findEAN13 pixmap = withRow center pixmap (fmap head . findMatch)
+    where (_, (maxX, _)) = bounds pixmap
+          center = (maxX + 1) `div` 2
+
+main :: IO ()
+main = do
+  args <- getArgs
+  forM_ args $ \arg -> do
+    e <- parse parseRawPPM <$> L.readFile arg
+    case e of
+      Left err     -> print $ "error: " ++ err
+      Right pixmap -> print $ findEAN13 pixmap
