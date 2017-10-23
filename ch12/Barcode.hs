@@ -70,7 +70,7 @@ encodeEAN13 = concat . encodeDigits . map digitToInt
 encodeDigits :: [Int] -> [String]
 encodeDigits s@(first:rest) =
         outerGuard : lefties ++ centerGuard : righties ++ [outerGuard]
-    where (left, right) = splitAt 5 rest
+    where (left, right) = splitAt 6 rest
           lefties = zipWith leftEncode (parityCodes ! first) left
           righties = map rightEncode (right ++ [checkDigit s])
 
@@ -185,10 +185,11 @@ type Digit = Word8
 -- the same expression, expressed without a list comprehension
 -- zip (map (flip distance (scaleToOne ps)) srl) digits
 -- the same expression, written entirely as a list comprehension
+-- [(distance d (scaleToOne ps), n) | d <- srl, n <- digits]
 
 bestScores :: ScoreTable -> [Run] -> [(Score, Digit)]
 bestScores srl ps = take 3 . sort $ scores
-    where scores = [(distance d (scaleToOne ps), n) | d <- srl, n <- digits]
+    where scores = zip [distance d (scaleToOne ps) | d <- srl] digits
           digits = [0..9]
 
 -- Remembering a Match's Parity
