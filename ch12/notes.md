@@ -265,4 +265,15 @@ fromList [(0,[Odd 4,Even 6]),(6,[Odd 3,Even 3]),(7,[Odd 4,Even 3]),(9,[Odd 3,Eve
 *Main> let input = zip (runLengths $ encodeEAN13 "978013211467") (cycle [Zero, One])
 *Main> listToMaybe . solve . candidateDigits $ input
 Just [0,2,0,1,0,0,0,0,0,0,0,0,1] -- WRONG
+
+-- After SO question and consequent corrections
+*Main> let input = zip (runLengths $ encodeEAN13 "978013211467") (cycle [Zero, One])
+*Main> listToMaybe . solve . candidateDigits $ input
+Just [9,7,8,0,1,3,2,1,1,4,6,7,7]
 ```
+
+### Working with Row Data
+
+> This function (`row`) takes a bit of explaining. Whereas `fmap` transforms the values in an array, `ixmap` transforms the indices of an array. It’s a very powerful function that lets us _slice_ an array however we please.
+> The first argument to `ixmap` is the bounds of the new array. These bounds can be of a different dimension than the source array. In `row` , for example, we’re extracting a one-dimensional array from a two-dimensional array.
+> The second argument is a projection function. This takes an index from the new array and returns an index into the source array. The value at that projected index then becomes the value in the new array at the original index. For example, if we pass 2 into the projection function and it returns (2,2) , the element at index 2 of the new array will be taken from element (2,2) of the source array.

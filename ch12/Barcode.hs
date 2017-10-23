@@ -319,3 +319,15 @@ solve xs = catMaybes $ map (addCheckDigit m) checkDigits
     where checkDigits = map fromParity (last xs)
           m = buildMap (init xs)
           addCheckDigit m k = (++[k]) <$> M.lookup k m
+
+-- Working with Row Data
+
+-- withRow function takes a row, converts it to monochrome
+withRow :: Int -> Pixmap -> (RunLength Bit -> a) -> a
+withRow n greymap f = f. runLenght . elemes $ posterized
+    where posterized = threshold 0.4 . fmap luminance . row n $ greymap
+
+row :: (Ix a, Ix b) => b -> Array (a,b) c -> Array a c
+row j a = ixmap (l, u) project a
+    where project i = (i, j)
+          ((l, _), (u, _)) = bounds a
