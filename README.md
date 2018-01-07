@@ -22,3 +22,4 @@ $ sudo apt-get install haskell-platform
 - [10. Code Case Study: Parsing a Binary Data Format](ch10/notes.md)
 - [11. Testing and quality assurance](ch11/notes.md)
 - [12. Barcode Recognition](ch12/notes.md)
+- [13. Data Structures](ch13/notes.md)
