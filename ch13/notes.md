@@ -76,3 +76,5 @@ use :? for help.
 *Main> :t calc plus5a
 calc plus5a :: Int -> Int
 ```
+
+### Extended Example: /etc/passwd
