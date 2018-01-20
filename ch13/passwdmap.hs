@@ -85,6 +85,7 @@ main = do
   let maps = inputToMaps content
   mainMenu maps
 
+mainMenu :: (UIDMap, UserMap) -> IO ()
 mainMenu maps@(uidmap, usermap) = do
   putStrLn optionText
   hFlush stdout
@@ -112,7 +113,7 @@ mainMenu maps@(uidmap, usermap) = do
         Nothing -> putStrLn "Not found."
         Just x  -> print x
   displayFile =
-    putStrLn . unlines . map (show . snd) Map.toList $ uidmap
+    putStr . unlines . map (show . snd) . Map.toList $ uidmap
   optionText =
     "\npasswdmap options:\n\
     \\n\
