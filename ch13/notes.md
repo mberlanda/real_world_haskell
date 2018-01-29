@@ -78,3 +78,28 @@ calc plus5a :: Int -> Int
 ```
 
 ### Extended Example: /etc/passwd
+
+### Extended Example: Numeric Types
+
+Back to ch06, it was shown in some [tables](../ch06/tables) how numeric typeclasses come to Haskell.
+
+```hs
+# Prelude> :t (+)
+(+) :: Num a => a -> a -> a
+```
+
+```
+*Main> :l ch13/numsimple.hs
+*Main> Number 5
+Number 5
+*Main> :t Number 5
+Number 5 :: Num a => SymbolicManip a
+*Main> :t Number (5::Int)
+Number (5::Int) :: SymbolicManip Int
+*Main> Number 5 * Number 10
+Arith Mul (Number 5) (Number 10)
+*Main> (5 * 10)::SymbolicManip Int
+Arith Mul (Number 5) (Number 10)
+*Main> (5 * 10 + 2)::SymbolicManip Int
+Arith Plus (Arith Mul (Number 5) (Number 10)) (Number 2)
+```
