@@ -103,3 +103,16 @@ Arith Mul (Number 5) (Number 10)
 *Main> (5 * 10 + 2)::SymbolicManip Int
 Arith Plus (Arith Mul (Number 5) (Number 10)) (Number 2)
 ```
+### Taking advantage of functions as data
+
+```hs
+*Main> :l ch13/DList.hs
+[1 of 1] Compiling DList            ( ch13/DList.hs, interpreted )
+Ok, one module loaded.
+*DList> let x = from
+fromEnum      fromInteger   fromIntegral  fromList      fromRational
+*DList> let x = fromList [1, 2]
+*DList> let y = fromList [
+*DList> toList $ append' x y
+[1,2]
+```
